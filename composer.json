@@ -1,0 +1,36 @@
+{
+    "name": "pepco-api/php-rest-sdk",
+    "type": "library",
+    "version": "0.1.0",
+    "description": "PHP package to connect your application to Pasargad Internet Payment Gateway through RESTful API",
+    "license": "Apache 2.0",
+    "homepage": "https://github.com/pepco-api/php-rest-sdk",
+    "support": {
+        "issues": "https://github.com/pepco-api/php-rest-sdk/issues"
+    },
+    "authors": [{
+        "name": "Reza Seyf",
+        "email": "rseyf@hotmail.com"
+    }],
+    "require": {
+        "php": ">=5.6.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "curl/curl": "1.9.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pasargad\\Api\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pasargad\\Api\\": "tests/"
+        }
+    },
+    "scripts": {
+        "code": "phpcs --encoding=utf-8 -s",
+        "util": "phpunit --testsuite util",
+        "test": "phpunit"
+    }
+}
