@@ -79,7 +79,7 @@ abstract class AbstractPayment {
 
     public function setTerminalId($terminalId)
     {
-        $this->$terminalId = $terminalId;
+        $this->terminalId = $terminalId;
     }
 
     public function getRedirectUrl()

@@ -10,8 +10,8 @@ namespace Pasargad\Api;
  */
 use Pasargad\Api\Classes\AbstractPayment;
 use Pasargad\Api\Classes\RequestBuilder;
-use Pep\Api\Classes\RSA\RSAProcessor;
-
+use phpseclib3\Crypt\RSA;
+use phpseclib3\Crypt\Common\PrivateKey;
 class Pasargad extends AbstractPayment
 {
     /** @var array $params */
@@ -26,6 +26,12 @@ class Pasargad extends AbstractPayment
     /** @var RequestBuilder $requestBuilder */
     private $requestBuilder;
 
+    public function __construct($action = 1003)
+    {
+        parent::__construct($action);
+        $this->requestBuilder = new RequestBuilder();
+    }
+    
     /**
      * Add parameter to request parameters ($this->params variable)
      * @var string $key
@@ -60,9 +66,9 @@ class Pasargad extends AbstractPayment
 
     private function getSignedParams()
     {
-        /** @var RSAProcessor $processor */
-        $processor = new RSAProcessor($this->getCertificate());
-        $this->signedParams = base64_encode($processor->sign(sha1(json_encode($this->getParams()), true)));
+        /** @var PrivateKey $key */
+        $key = RSA::loadFormat('PKCS1', file_get_contents($this->getCertificate()), 'password');
+        $this->signedParams = base64_encode($key->sign(json_encode($this->getParams())));
         return $this->signedParams;
     }
 

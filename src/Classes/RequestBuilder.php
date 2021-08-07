@@ -3,7 +3,7 @@
 namespace Pasargad\Api\Classes;
 
 use Curl\Curl;
-use Pep\Api\Classes\RSA\RSAProcessor;
+use Pasargad\Api\Classes\RSA\RSAProcessor;
 
 class RequestBuilder
 {
