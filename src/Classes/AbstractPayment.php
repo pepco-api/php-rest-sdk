@@ -22,6 +22,15 @@ abstract class AbstractPayment {
     /** @var int $action */
     private $action;
 
+    /** @var int $amount */
+    private $amount;
+
+    /** @var int $invoiceNumber */
+    private $invoiceNumber;
+
+    /** @var string $invoiceDate */
+    private $invoiceDate;
+
     /** @var string $mobile */
     private $mobile = null;
     
@@ -100,5 +109,35 @@ abstract class AbstractPayment {
     public function setAction($action)
     {
         $this->action = $action;
+    }
+
+    public function setAmount($amount) 
+    {
+        $this->amount = $amount;
+    }
+
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    public function setInvoiceNumber($number)
+    {
+        $this->invoiceNumber = $number;
+    }
+
+    public function getInvoiceNumber()
+    {
+        return $this->invoiceNumber;
+    }
+
+    public function setInvoiceDate($date)
+    {
+        $this->invoiceDate = $date;
+    }
+
+    public function getInvoiceDate()
+    {
+        return $this->invoiceDate;
     }
 }

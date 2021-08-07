@@ -81,7 +81,7 @@ class RequestBuilder
      * @throws Exception Throw on unsupported $method use.
      * @throws \Exception Throw on API return invalid response.
      */
-    public function send($url, $method = self::POST, array $headers = [], array $body = [])
+    public function send($url, $method = self::POST, array $headers = [], array $body = [], $encodeJson = false)
     {
         $this->internalCurl->reset();
         foreach ($this->options as $option => $value) {
@@ -97,11 +97,11 @@ class RequestBuilder
                 break;
             case self::POST:
                 $this->internalCurl->setHeader('Content-Type', 'application/json;charset=UTF-8');
-                $this->internalCurl->post($url, json_encode($body, JSON_UNESCAPED_UNICODE));
+                $this->internalCurl->post($url, $encodeJson ? json_encode($body) : $body);
                 break;
             case self::PUT:
                 $this->internalCurl->setHeader('Content-Type', 'application/json;charset=UTF-8');
-                $this->internalCurl->put($url, json_encode($body, JSON_UNESCAPED_UNICODE), true);
+                $this->internalCurl->put($url, $encodeJson ? json_encode($body) : $body, true);
                 break;
             default:
                 throw new \Exception('Not supported method ' . $method . '.');

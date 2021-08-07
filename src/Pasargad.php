@@ -51,9 +51,9 @@ class Pasargad extends AbstractPayment
             "terminalCode" => $this->getTerminalId(),
             "redirectAddress" => $this->getRedirectUrl(),
             "timeStamp" => $this->getTimestamp(),
-            "amount" => '',
-            "invoiceNumber" => '',
-            "invoiceDate" => '',
+            "amount" => $this->getAmount(),
+            "invoiceNumber" => $this->getInvoiceNumber(),
+            "invoiceDate" => $this->getInvoiceDate()
         ];
         if ($this->getEmail()) {
             $this->params["email"] = $this->getEmail();
@@ -67,7 +67,7 @@ class Pasargad extends AbstractPayment
     private function getSignedParams()
     {
         /** @var PrivateKey $key */
-        $key = RSA::loadFormat('PKCS1', file_get_contents($this->getCertificate()), 'password');
+        $key = RSA::loadFormat('XML', file_get_contents($this->getCertificate()));
         $this->signedParams = base64_encode($key->sign(json_encode($this->getParams())));
         return $this->signedParams;
     }
