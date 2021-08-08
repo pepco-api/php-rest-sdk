@@ -38,6 +38,10 @@ abstract class AbstractPayment
     /** @var string $email */
     private $email = null;
 
+    /** @var string $transactionReferenceId */
+    private $transactionReferenceId;
+
+
     public function getMobile()
     {
         return $this->mobile;
@@ -141,5 +145,15 @@ abstract class AbstractPayment
     public function getInvoiceDate()
     {
         return $this->invoiceDate;
+    }
+
+    public function setTransactionReferenceId($refId)
+    {
+        $this->transactionReferenceId = $refId;
+    }
+
+    public function getTransactionReferenceId()
+    {
+        return $this->transactionReferenceId;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Pasargad\Classes;
 
 use Curl\Curl;
@@ -33,6 +32,9 @@ class RequestBuilder
     /** @var array $options */
     protected $options;
 
+    /**
+     * RequestBuilder Class constructor.
+     */
     public function __construct()
     {
         $this->internalCurl = new Curl();
@@ -82,15 +84,11 @@ class RequestBuilder
 
         if (false === empty($this->internalCurl->response)) {
             $json = json_decode($this->internalCurl->response);
-            if (null === $json) {
+            if ($json === null) {
                 throw new \Exception(json_last_error_msg(), json_last_error());
             }
-
-            if (true === isset($json['errorCode'])) {
-                if (true === isset($json['description'])) {
-                    throw new \Exception($json['description']);
-                }
-                throw new \Exception($json['errorCode']);
+            if ($json['IsSuccess'] == false) {
+                throw new \Exception($json['Message']);
             }
             return $json;
         }
