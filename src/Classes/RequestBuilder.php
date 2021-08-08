@@ -1,9 +1,8 @@
 <?php
 
-namespace Pasargad\Api\Classes;
+namespace Pasargad\Classes;
 
 use Curl\Curl;
-use Pasargad\Api\Classes\RSA\RSAProcessor;
 
 class RequestBuilder
 {
@@ -22,34 +21,6 @@ class RequestBuilder
     const POST = 'POST';
 
     /**
-     * The API put method.
-     *
-     * @const string
-     */
-    const PUT = 'PUT';
-
-    /**
-     * Address of gateway for getting token
-     * @var string
-     */
-    const URL_GET_TOKEN = "https://pep.shaparak.ir/Api/v1/Payment/GetToken";
-
-    /**
-     * Address of payment gateway
-     * @var string
-     */
-    const URL_GATEWAY = "https://pep.shaparak.ir/Api/v1/Payment/";
-
-    /**
-     * Redirect User with token to this URL
-     * e.q: https://pep.shaparak.ir/payment.aspx?n=Token
-     */
-    const URL_PAYMENT_GATEWAY = "https://pep.shaparak.ir/payment.aspx";
-
-    const URL_CHECK_TRANSACTION = 'https://pep.shaparak.ir/Api/v1/Payment/CheckTransactionResult';
-    const URL_VERIFY_PAYMENT = 'https://pep.shaparak.ir/Api/v1/Payment/VerifyPayment';
-
-    /**
      * The request.
      *
      * @var Curl $internalCurl
@@ -62,10 +33,8 @@ class RequestBuilder
     /** @var array $options */
     protected $options;
 
-    public function __construct(array $params = [], array $headers = ['Accept' => 'application/json'])
+    public function __construct()
     {
-        $this->headers = $headers;
-        $this->options = $params; 
         $this->internalCurl = new Curl();
     }
 
@@ -88,20 +57,17 @@ class RequestBuilder
             $this->internalCurl->setOpt($option, $value);
         }
 
+        $this->internalCurl->setHeader('Content-Type', 'application/json');
+        $this->internalCurl->setHeader('Accept', 'application/json');
         foreach ($headers as $headerKey => $headerValue) {
-            $this->internalCurl->setHeader($headerKey,$headerValue);
+            $this->internalCurl->setHeader($headerKey, $headerValue);
         }
         switch ($method) {
             case self::GET:
                 $this->internalCurl->get($url);
                 break;
             case self::POST:
-                $this->internalCurl->setHeader('Content-Type', 'application/json;charset=UTF-8');
                 $this->internalCurl->post($url, $encodeJson ? json_encode($body) : $body);
-                break;
-            case self::PUT:
-                $this->internalCurl->setHeader('Content-Type', 'application/json;charset=UTF-8');
-                $this->internalCurl->put($url, $encodeJson ? json_encode($body) : $body, true);
                 break;
             default:
                 throw new \Exception('Not supported method ' . $method . '.');
@@ -115,7 +81,7 @@ class RequestBuilder
         }
 
         if (false === empty($this->internalCurl->response)) {
-            $json = json_decode($this->internalCurl->response, true);
+            $json = json_decode($this->internalCurl->response);
             if (null === $json) {
                 throw new \Exception(json_last_error_msg(), json_last_error());
             }

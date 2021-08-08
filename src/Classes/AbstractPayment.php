@@ -1,11 +1,12 @@
 <?php
-// src/Classes/AbstractPayment.php
-namespace Pasargad\Api\Classes;
+
+namespace Pasargad\Classes;
 
 /**
  * Class AbstractPayment
  */
-abstract class AbstractPayment {
+abstract class AbstractPayment
+{
 
     /** @var int $merchantId */
     protected $merchantId;
@@ -14,13 +15,13 @@ abstract class AbstractPayment {
     protected $terminalId;
 
     /** @var string $redirectUrl */
-    protected $redirectUrl; 
-    
+    protected $redirectUrl;
+
     /** @var string $certificate */
-    private $certificate;
+    protected $certificate;
 
     /** @var int $action */
-    private $action;
+    protected $action;
 
     /** @var int $amount */
     private $amount;
@@ -33,7 +34,7 @@ abstract class AbstractPayment {
 
     /** @var string $mobile */
     private $mobile = null;
-    
+
     /** @var string $email */
     private $email = null;
 
@@ -67,7 +68,8 @@ abstract class AbstractPayment {
         return $this->certificate;
     }
 
-    public function setCertificate($code) {
+    public function setCertificate($code)
+    {
         $this->certificate = $code;
     }
 
@@ -78,7 +80,7 @@ abstract class AbstractPayment {
 
     public function setMerchantId($merchantId)
     {
-        $this->merchantId = $merchantId;
+        $this->merchantId = strval($merchantId);
     }
 
     public function getTerminalId()
@@ -88,7 +90,7 @@ abstract class AbstractPayment {
 
     public function setTerminalId($terminalId)
     {
-        $this->terminalId = $terminalId;
+        $this->terminalId = strval($terminalId);
     }
 
     public function getRedirectUrl()
@@ -111,7 +113,7 @@ abstract class AbstractPayment {
         $this->action = $action;
     }
 
-    public function setAmount($amount) 
+    public function setAmount($amount)
     {
         $this->amount = $amount;
     }
@@ -128,7 +130,7 @@ abstract class AbstractPayment {
 
     public function getInvoiceNumber()
     {
-        return $this->invoiceNumber;
+        return strval($this->invoiceNumber);
     }
 
     public function setInvoiceDate($date)

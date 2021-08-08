@@ -16,17 +16,16 @@
         "php": ">=5.6.0",
         "ext-curl": "*",
         "ext-json": "*",
-        "curl/curl": "1.9.*",
-        "phpseclib/phpseclib": "3.0.9"
+        "curl/curl": "1.9.*"
     },
     "autoload": {
         "psr-4": {
-            "Pasargad\\Api\\": "src/"
+            "Pasargad\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Pasargad\\Api\\": "tests/"
+            "Pasargad\\": "tests/"
         }
     },
     "scripts": {
