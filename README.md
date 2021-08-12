@@ -32,8 +32,15 @@ $pasargad->setInvoiceNumber(4029);
 // set Invoice Date with below format (Y/m/d H:i:s)
 $pasargad->setInvoiceDate("2021/08/08 11:54:03");
 
-// redirect user to gateway
-return $pasargad->redirect();
+// get the Generated RedirectUrl from Pasargad API:
+// output example: https://pep.shaparak.ir/payment.aspx?n=bPo+Z8GLB4oh5W0KVNohihxCu1qBB3kziabGvO1xqg8Y=  
+$redirectUrl = $pasargad->redirect();
+
+// and redirect user to payment gateway:
+return header("Location: $redirectUrl");
+
+// ...or in Laravel/Symfony Controller (Controller extends Symfony\Component\HttpFoundation\Response):
+return  $this->redirect($redirectUrl);
 ```
 
 ## Checking and Verifying Transaction

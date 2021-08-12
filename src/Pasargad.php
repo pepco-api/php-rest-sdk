@@ -19,13 +19,7 @@ class Pasargad extends AbstractPayment
      * @var string
      */
     const URL_GET_TOKEN = "https://pep.shaparak.ir/Api/v1/Payment/GetToken";
-
-    /**
-     * Address of payment gateway
-     * @var string
-     */
-    const URL_GATEWAY = "https://pep.shaparak.ir/Api/v1/Payment/";
-
+ 
     /**
      * Redirect User with token to this URL
      * e.q: https://pep.shaparak.ir/payment.aspx?n=Token
@@ -89,7 +83,7 @@ class Pasargad extends AbstractPayment
         if (!$this->token) {
             $this->token = $this->getToken();
         }
-        return header("Location: " . static::URL_PAYMENT_GATEWAY . "?n=" . $this->token);
+        return static::URL_PAYMENT_GATEWAY . "?n=" . $this->token;
     }
 
     /**
