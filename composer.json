@@ -1,7 +1,7 @@
 {
     "name": "pepco-api/php-rest-sdk",
     "type": "library",
-    "version": "0.1.1.0",
+    "version": "0.2.1",
     "description": "PHP package to connect your application to Pasargad Internet Payment Gateway through RESTful API",
     "license": "Apache-2.0",
     "homepage": "https://github.com/pepco-api/php-rest-sdk",
