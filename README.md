@@ -134,4 +134,4 @@ return $pasargad->refundPayment();
 # Support
 Please use your credentials to login into [Support Panel](https://my.pep.co.ir)
 
-Contact Author: [Reza Seyf](https://twitter.com/seyfcode) 
+Contact Author/Maintainer: [Reza Seyf](https://twitter.com/seyfcode) 
