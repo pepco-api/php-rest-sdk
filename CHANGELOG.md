@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project is documented in this file.
 
+## [0.2.2] - 2021 14 Aug (Refund URL bugfix)
+### Changes
+ - `URL_REFUND` address changed to correct value.
+
+
 ## [0.2.1] - 2021 12 Aug (Redirect Changes)
 ### Added
  - Added Versions `CHANGELOG.md` to this project.
