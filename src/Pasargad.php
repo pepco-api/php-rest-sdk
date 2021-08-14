@@ -27,7 +27,7 @@ class Pasargad extends AbstractPayment
     const URL_PAYMENT_GATEWAY = "https://pep.shaparak.ir/payment.aspx";
     const URL_CHECK_TRANSACTION = 'https://pep.shaparak.ir/Api/v1/Payment/CheckTransactionResult';
     const URL_VERIFY_PAYMENT = 'https://pep.shaparak.ir/Api/v1/Payment/VerifyPayment';
-    const URL_REFUND = 'https://pep.shaparak.ir/Api/v1/Payment/VerifyPayment';
+    const URL_REFUND = 'https://pep.shaparak.ir/Api/v1/Payment/RefundPayment';
 
     /**
      * Pasargad Constructor
