@@ -83,7 +83,7 @@ class RequestBuilder
         }
 
         if (false === empty($this->internalCurl->response)) {
-            $json = json_decode($this->internalCurl->response);
+            $json = json_decode($this->internalCurl->response,true);
             if ($json === null) {
                 throw new \Exception(json_last_error_msg(), json_last_error());
             }
