@@ -1,5 +1,8 @@
 # Change Log
 All notable changes to this project is documented in this file.
+## [0.2.3] - 2021 14 Sept (RequestBuilder bugfix)
+### Changes
+ - `RequestBuilder` bugfix
 
 ## [0.2.2] - 2021 14 Aug (Refund URL bugfix)
 ### Changes
