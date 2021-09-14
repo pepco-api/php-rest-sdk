@@ -30,7 +30,7 @@ class RequestBuilder
     protected $headers;
 
     /** @var array $options */
-    protected $options;
+    protected $options = [];
 
     /**
      * RequestBuilder Class constructor.
