@@ -1,5 +1,8 @@
 # Change Log
 All notable changes to this project is documented in this file.
+## [0.2.4] - 2021 14 Sept (RequestBuilder for json_decode)
+### Changes
+ - `RequestBuilder` bugfix for json_decode null associated argument bug
 ## [0.2.3] - 2021 14 Sept (RequestBuilder bugfix)
 ### Changes
  - `RequestBuilder` bugfix
