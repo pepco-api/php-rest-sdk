@@ -1,5 +1,11 @@
 # Change Log
 All notable changes to this project is documented in this file.
+## [0.3.1] - 2021 15 Sept (namespace conflicts)
+### Changes
+ - namespace typo fixed
+ - array to string conversion error fixed
+ - Readme file updated
+
 ## [0.2.4] - 2021 14 Sept (RequestBuilder for json_decode)
 ### Changes
  - `RequestBuilder` bugfix for json_decode null associated argument bug

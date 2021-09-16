@@ -33,8 +33,10 @@ $pasargad->setInvoiceNumber(4029);
 $pasargad->setInvoiceDate("2021/08/08 11:54:03");
 
 // get the Generated RedirectUrl from Pasargad API:
-// output example: https://pep.shaparak.ir/payment.aspx?n=bPo+Z8GLB4oh5W0KVNohihxCu1qBB3kziabGvO1xqg8Y=  
 $redirectUrl = $pasargad->redirect();
+var_dump($redirectUrl);
+// output example: https://pep.shaparak.ir/payment.aspx?n=bPo+Z8GLB4oh5W0KVNohihxCu1qBB3kziabGvO1xqg8Y=  
+
 
 // and redirect user to payment gateway:
 return header("Location: $redirectUrl");
@@ -64,25 +66,27 @@ $pasargad->setInvoiceNumber(4029);
 $pasargad->setInvoiceDate("2021/08/08 11:54:03");
 
 // check Transaction result
-return $pasargad->checkTransaction();
+var_dump($pasargad->checkTransaction());
 ```
 
-Successful result:
-```json
-{
-    "TraceNumber": 13,
-    "ReferenceNumber": 100200300400500,
-    "TransactionDate": "2021/08/08 11:58:23",
-    "Action": "1003",
-    "TransactionReferenceID": "636843820118990203",
-    "InvoiceNumber": "4029",
-    "InvoiceDate": "2021/08/08 11:54:03",
-    "MerchantCode": 100123,
-    "TerminalCode": 200123,
-    "Amount": 15000,
-    "IsSuccess": true,
-    "Message": " "
-}
+Successful result is a PHP array:
+```php
+$result = [
+  "TraceNumber" => 908768
+  "ReferenceNumber" => 141113323710
+  "TransactionDate" => "2021/09/16 12:08:28"
+  "Action" => "1003"
+  "TransactionReferenceID" => "637673907761796375"
+  "InvoiceNumber" => "40209"
+  "InvoiceDate" => "2021/09/16 11:54:03"
+  "MerchantCode" => 4532980
+  "TerminalCode" => 1718577
+  "Amount" => 15000.0
+  "TrxHashedCardNumber" => "9EB09984BF3F0FDA07D6055997A32F363276D4BD029AE0C870E60DCFC37ED02C"
+  "TrxMaskedCardNumber" => "5022-29**-****-0682"
+  "IsSuccess" => true
+  "Message" => "عمليات به اتمام رسيد"
+]
 ```
 If you got `IsSuccess` with `true` value, so everything is O.K!
 
@@ -103,16 +107,15 @@ $pasargad->setInvoiceDate("2021/08/08 11:54:03");
 return $pasargad->verifyPayment();
 ```
 
-...and the successful response looks like this response:
-```json
-{
- "IsSuccess": true,
- "Message": " ",
- "MaskedCardNumber": "5022-29**-****-2328",
- "HashedCardNumber": "2DDB1E270C598677AE328AA37C2970E3075E1DB6665C5AAFD131C59F7FAD99F23680536B07C140D24AAD8355EA9725A5493AC48E0F48E39D50B54DB906958182",
- "ShaparakRefNumber": "100200300400500"
-}
-
+...and the successful response, is an array:
+```php
+$result = [
+  "MaskedCardNumber" => "5022-29**-****-0682"
+  "HashedCardNumber" => "2DDB1E270C598677AE328AA37C2970E3075E1DB6665C5AAFD131C59F7FAD99F23680536B07C140D24AAD8355EA9725A5493AC48E0F48E39D50B54DB906958182"
+  "ShaparakRefNumber" => "141113323710"
+  "IsSuccess" => true
+  "Message" => "عمليات با موفقيت انجام شد"
+]
 ```
 
 ## Payment Refund

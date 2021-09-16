@@ -80,10 +80,12 @@ class Pasargad extends AbstractPayment
      */
     public function redirect()
     {
+        $token = null;
         if (!$this->token) {
             $this->token = $this->getToken();
         }
-        return static::URL_PAYMENT_GATEWAY . "?n=" . $this->token;
+        $token = $this->token["Token"];
+        return static::URL_PAYMENT_GATEWAY . "?n=" . $token;
     }
 
     /**
