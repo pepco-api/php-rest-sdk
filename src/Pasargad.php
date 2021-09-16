@@ -1,6 +1,6 @@
 <?php
 
-namespace Pasrgad;
+namespace Pasargad;
 
 use Pasargad\Classes\AbstractPayment;
 use Pasargad\Classes\RequestBuilder;
