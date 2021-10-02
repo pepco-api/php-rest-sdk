@@ -10,11 +10,10 @@ use Pasargad\Classes\RSA\RSAProcessor;
 
 class BosIPG extends AbstractBosIPG
 {
+    private const PLATFORM_WEB = "WEB";    
+    private const PURCHASE = "Purchase";
+    private const BILL = "Bill";
 
-    const PLATFORM_WEB = "WEB";
-    
-    const PURCHASE = 8;
-    const BILL = "Bill";
     const MCI_DIRECT = "MCI";
     const IRANCELL_DIRECT = "MTN";
     const RIGHTEL_DIRECT = "RTL";
@@ -31,6 +30,15 @@ class BosIPG extends AbstractBosIPG
         self::MTN_PIN => 6,
         self::RIGHTEL_PIN => 7,
         self::PURCHASE => 8,
+    ]; 
+
+    private static $validCellphoneCharges = [
+        self::MCI_DIRECT,
+        self::IRANCELL_DIRECT,
+        self::RIGHTEL_DIRECT,
+        self::MCI_PIN,
+        self::MTN_PIN,
+        self::RIGHTEL_PIN,
     ]; 
 
     /** @var RequestBuilder $api */
@@ -97,18 +105,18 @@ class BosIPG extends AbstractBosIPG
         $params["amount"] = $this->getAmount();
         $params["invoice"] = $this->getInvoice();
         $params["invoiceDate"] = $this->getInvoiceDate();
-        $params["serviceCode"] = self::$serviceCodes[self::PURCHASE];
-
+        
         // Optional Parameters
         $params["description"] = $this->getDescription();
         $params["payerMail"] = $this->getPayerMail();
         $params["payerName"] = $this->getPayerName();
-
+        
         // Strong Authorization
         $params["mobileNumber"] = $this->getMobileNumber();
-
+        
         // Filled by system
-        $params["platform"] = $this->getPlatform();
+        $params["serviceCode"] = self::$serviceCodes[self::PURCHASE];
+        $params["platform"] = self::PLATFORM_WEB;
         $params["callbackApi"] = $this->getRedirectAddress();
         $params["terminalNumber"] = $this->getTerminalCode();
 
@@ -132,14 +140,14 @@ class BosIPG extends AbstractBosIPG
      */
     public function verifyTransaction()
     {
-        $params['invoice'] = $this->getAmount();
+        $params['invoice'] = $this->getInvoice();
         $params['urlId'] = $this->getUrlId();
         $response = $this->api->send(
             static::URL_VERIFY_TRANSACTION,
             RequestBuilder::POST, 
             ["Authorization" => "Bearer " . $this->getToken()],
             $params,
-            true); 
+            true);
         $resultMsg = $response["resultMsg"];
         $resultCode = $response["resultCode"];
         if ($resultCode !== 0) {
@@ -151,13 +159,25 @@ class BosIPG extends AbstractBosIPG
     /**
      * Purchase Cellphone Charge
      */
-    public function purchaseCellphoneCharge()
+    public function purchaseCellphoneCharge($type = self::IRANCELL_DIRECT)
     {
+        if (!in_array($type,self::$validCellphoneCharges)) {
+            $validTypes = null;
+            foreach (self::$validCellphoneCharges as $validType) {
+                $validTypes .= "'$validType'";
+            }
+            throw new \Exception("current type '$type' is not supported. supported types: $validTypes");
+        }
+
         // Mandatory Parameters
         $params["amount"] = $this->getAmount();
         $params["invoice"] = $this->getInvoice();
         $params["invoiceDate"] = $this->getInvoiceDate();
-        $params["serviceCode"] = $this->getPassword();
+        $params["productCode"] = 95;
+
+
+        $params["serviceCode"] = self::$serviceCodes[$type];
+        $params["serviceType"] = $type;
 
         // Optional Parameters
         $params["description"] = $this->getDescription();
@@ -168,7 +188,7 @@ class BosIPG extends AbstractBosIPG
         $params["mobileNumber"] = $this->getMobileNumber();
 
         // Filled by system
-        $params["platform"] = $this->getPlatform();
+        $params["platform"] = self::PLATFORM_WEB;
         $params["callbackApi"] = $this->getRedirectAddress();
         $params["terminalNumber"] = $this->getTerminalCode();
 
@@ -179,6 +199,51 @@ class BosIPG extends AbstractBosIPG
             $params,
             true
         );
+        $resultMsg = $response["resultMsg"];
+        $resultCode = $response["resultCode"];
+        if ($resultCode !== 0) {
+            throw new \Exception("Error[$resultCode]: $resultMsg");
+        }
+        return $response["data"];
+    }
+
+    /**
+     * Pay Bill
+     */
+    public function payBill()
+    { 
+        // Mandatory Parameters
+        $params["amount"] = $this->getAmount();
+        $params["invoice"] = $this->getInvoice();
+        $params["invoiceDate"] = $this->getInvoiceDate();
+        $params["productCode"] = $this->getProductCode();
+        $params["billId"] = $this->getBillId();
+        $params["paymentId"] = $this->getPaymentId();
+
+        $params["serviceCode"] = self::$serviceCodes[self::BILL];
+        $params["serviceType"] = self::BILL;
+
+        // Optional Parameters
+        $params["description"] = $this->getDescription();
+        $params["payerMail"] = $this->getPayerMail();
+        $params["payerName"] = $this->getPayerName();
+
+        // Strong Authorization
+        $params["mobileNumber"] = $this->getMobileNumber();
+
+        // Filled by system
+        $params["platform"] = self::PLATFORM_WEB;
+        $params["callbackApi"] = $this->getRedirectAddress();
+        $params["terminalNumber"] = $this->getTerminalCode();
+
+        $response = $this->api->send(
+            static::URL_PURCHASE,
+            RequestBuilder::POST,
+            ["Authorization" => "Bearer " . $this->getToken()],
+            $params,
+            true
+        );
+
         $resultMsg = $response["resultMsg"];
         $resultCode = $response["resultCode"];
         if ($resultCode !== 0) {

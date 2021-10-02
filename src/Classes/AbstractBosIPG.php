@@ -53,6 +53,15 @@ abstract class AbstractBosIPG
     /** @var string $urlId */
     protected $urlId;
 
+    /** @var string $productCode */
+    protected $productCode;
+
+    /** @var string $billId */
+    protected $billId;
+
+    /** @var string $paymentId */
+    protected $paymentId;
+
     public function getUsername()
     {
         return $this->username;
@@ -136,10 +145,10 @@ abstract class AbstractBosIPG
         return $this->invoiceDate;
     }
 
-    public function setInvoiceDate($invoiceDate)
+    public function setInvoiceDate(\Datetime $invoiceDate)
     {
-        $this->invoiceDate = $invoiceDate;
-    } 
+        $this->invoiceDate = $invoiceDate->format('Y-m-d\TH:i:s.u');
+    }
  
     public function getMobileNumber()
     {
@@ -173,6 +182,9 @@ abstract class AbstractBosIPG
 
     public function getPlatform()
     {
+        $validPlatforms = [
+            "WEB"
+        ];
         return $this->platform;
     }
 
@@ -189,6 +201,36 @@ abstract class AbstractBosIPG
     public function setUrlId($urlId)
     {
         $this->urlId = $urlId;
+    }
+
+    public function getProductCode()
+    {
+        return $this->productCode;
+    }
+
+    public function setProductCode($productCode)
+    {
+        $this->productCode = $productCode;
+    }
+
+    public function getBillId()
+    {
+        return $this->billId;
+    }
+
+    public function setBillId($billId)
+    {
+        $this->billId = $billId;
+    }
+
+    public function getPaymentId()
+    {
+        return $this->paymentId;
+    }
+
+    public function setPaymentId($paymentId)
+    {
+        $this->paymentId = $paymentId;
     }
 
  
