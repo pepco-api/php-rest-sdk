@@ -15,7 +15,7 @@ abstract class AbstractBosIPG
     protected $password;
     
     /** @var string $token */
-    private $token = null;
+    protected $token = null;
 
     /** @var string $redirectAddress */
     protected $redirectAddress;

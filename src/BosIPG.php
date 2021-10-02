@@ -53,6 +53,7 @@ class BosIPG extends AbstractBosIPG
     const URL_PURCHASE = "https://pep.shaparak.ir/bos/api/payment/purchase";
     const URL_VERIFY_TRANSACTION = "https://pep.shaparak.ir/bos/api/payment/verify-transactions";
     const URL_PURCHASE_MOBILE_CHARGE = "https://pep.shaparak.ir/bos/api/payment/pre-transaction";
+    const URL_PAYMENT_INQUIRY = "https://pep.shaparak.ir/bos/api/payment/payment-inquiry";
 
     /**
      * BosIPG Constructor
@@ -88,6 +89,9 @@ class BosIPG extends AbstractBosIPG
      */
     public function getToken()
     {
+        if ($this->token != null) {
+            return $this->token;
+        }
         $params["username"] = $this->getUsername();
         $params["password"] = $this->getPassword();
         $response = $this->api->send(static::URL_GET_TOKEN, RequestBuilder::POST, [], $params, true);
@@ -244,6 +248,28 @@ class BosIPG extends AbstractBosIPG
             true
         );
 
+        $resultMsg = $response["resultMsg"];
+        $resultCode = $response["resultCode"];
+        if ($resultCode !== 0) {
+            throw new \Exception("Error[$resultCode]: $resultMsg");
+        }
+        return $response["data"];
+    }
+
+    
+
+    /**
+     * Verify Transaction
+     */
+    public function paymentInquiry()
+    {
+        $params['invoice'] = $this->getInvoice();
+        $response = $this->api->send(
+            static::URL_PAYMENT_INQUIRY,
+            RequestBuilder::POST,
+            ["Authorization" => "Bearer " . $this->getToken()],
+            $params,
+            true);
         $resultMsg = $response["resultMsg"];
         $resultCode = $response["resultCode"];
         if ($resultCode !== 0) {
