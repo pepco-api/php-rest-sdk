@@ -1,14 +1,10 @@
 <?php
-
 namespace Pasargad;
 
-use Pasargad\Classes\AbstractPayment;
 use Pasargad\Classes\RequestBuilder;
-use Pasargad\Classes\AbstractBosIPG;
-use Pasargad\Classes\RSA\RSAProcessor;
+use Pasargad\Classes\AbstractBossIPG;
 
-
-class BosIPG extends AbstractBosIPG
+class BossIPG extends AbstractBossIPG
 {
     private const PLATFORM_WEB = "WEB";    
     private const PURCHASE = "Purchase";
@@ -81,17 +77,6 @@ class BosIPG extends AbstractBosIPG
         $this->platform = $platform;
         $this->api = new RequestBuilder();
     }
-
-    /**
-     * Sign data using RSA key
-     * @var array $data
-     */
-    private function sign($data)
-    {
-        $processor = new RSAProcessor($this->certificate);
-        return base64_encode($processor->sign(sha1($data, true)));
-    }
-
 
     /**
      * Get Token to prepare user for redirecting to payment gateway
@@ -220,52 +205,6 @@ class BosIPG extends AbstractBosIPG
     }
 
     /**
-     * Pay Bill
-     */
-    public function payBill()
-    { 
-        // Mandatory Parameters
-        $params["amount"] = $this->getAmount();
-        $params["invoice"] = $this->getInvoice();
-        $params["invoiceDate"] = $this->getInvoiceDate();
-        $params["billId"] = $this->getBillId();
-        $params["paymentId"] = $this->getPaymentId();
-
-        $params["serviceCode"] = self::$serviceCodes[self::BILL];
-        $params["serviceType"] = self::BILL;
-
-        // Optional Parameters
-        $params["description"] = $this->getDescription();
-        $params["payerMail"] = $this->getPayerMail();
-        $params["payerName"] = $this->getPayerName();
-
-        // Strong Authorization
-        $params["mobileNumber"] = $this->getMobileNumber();
-
-        // Filled by system
-        $params["platform"] = self::PLATFORM_WEB;
-        $params["callbackApi"] = $this->getRedirectAddress();
-        $params["terminalNumber"] = $this->getTerminalCode();
-
-        $response = $this->api->send(
-            static::URL_PURCHASE,
-            RequestBuilder::POST,
-            ["Authorization" => "Bearer " . $this->getToken()],
-            $params,
-            true
-        );
-
-        $resultMsg = $response["resultMsg"];
-        $resultCode = $response["resultCode"];
-        if ($resultCode !== 0) {
-            throw new \Exception("Error[$resultCode]: $resultMsg");
-        }
-        return $response["data"];
-    }
-
-    
-
-    /**
      * Verify Transaction
      */
     public function paymentInquiry()
@@ -284,4 +223,53 @@ class BosIPG extends AbstractBosIPG
         }
         return $response["data"];
     }
+    
+    /**
+     * Pay Bill
+     * @deprecated
+     */
+    public function payBill()
+    { 
+        return false;
+        // // Mandatory Parameters
+        // $params["amount"] = $this->getAmount();
+        // $params["invoice"] = $this->getInvoice();
+        // $params["invoiceDate"] = $this->getInvoiceDate();
+        // $params["billId"] = $this->getBillId();
+        // $params["paymentId"] = $this->getPaymentId();
+
+        // $params["serviceCode"] = self::$serviceCodes[self::BILL];
+        // $params["serviceType"] = self::BILL;
+
+        // // Optional Parameters
+        // $params["description"] = $this->getDescription();
+        // $params["payerMail"] = $this->getPayerMail();
+        // $params["payerName"] = $this->getPayerName();
+
+        // // Strong Authorization
+        // $params["mobileNumber"] = $this->getMobileNumber();
+
+        // // Filled by system
+        // $params["platform"] = self::PLATFORM_WEB;
+        // $params["callbackApi"] = $this->getRedirectAddress();
+        // $params["terminalNumber"] = $this->getTerminalCode();
+
+        // $response = $this->api->send(
+        //     static::URL_PURCHASE,
+        //     RequestBuilder::POST,
+        //     ["Authorization" => "Bearer " . $this->getToken()],
+        //     $params,
+        //     true
+        // );
+
+        // $resultMsg = $response["resultMsg"];
+        // $resultCode = $response["resultCode"];
+        // if ($resultCode !== 0) {
+        //     throw new \Exception("Error[$resultCode]: $resultMsg");
+        // }
+        // return $response["data"];
+    }
+
+    
+
 }

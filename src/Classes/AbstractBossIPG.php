@@ -3,9 +3,9 @@
 namespace Pasargad\Classes;
 
 /**
- * Class AbstractBosIPG
+ * Class AbstractBossIPG
  */
-abstract class AbstractBosIPG
+abstract class AbstractBossIPG
 {
 
     /** @var string $username */
