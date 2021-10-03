@@ -53,8 +53,6 @@ abstract class AbstractBosIPG
     /** @var string $urlId */
     protected $urlId;
 
-    /** @var string $productCode */
-    protected $productCode;
 
     /** @var string $billId */
     protected $billId;
@@ -201,16 +199,6 @@ abstract class AbstractBosIPG
     public function setUrlId($urlId)
     {
         $this->urlId = $urlId;
-    }
-
-    public function getProductCode()
-    {
-        return $this->productCode;
-    }
-
-    public function setProductCode($productCode)
-    {
-        $this->productCode = $productCode;
     }
 
     public function getBillId()

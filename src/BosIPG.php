@@ -30,7 +30,16 @@ class BosIPG extends AbstractBosIPG
         self::MTN_PIN => 6,
         self::RIGHTEL_PIN => 7,
         self::PURCHASE => 8,
-    ]; 
+    ];
+
+    private static $productCodes = [
+        self::MCI_DIRECT => 95,
+        self::IRANCELL_DIRECT => 93,
+        self::RIGHTEL_DIRECT => 94,
+        self::MCI_PIN => 200095,
+        self::MTN_PIN => 200093,
+        self::RIGHTEL_PIN => 200094,
+    ];
 
     private static $validCellphoneCharges = [
         self::MCI_DIRECT,
@@ -177,9 +186,8 @@ class BosIPG extends AbstractBosIPG
         $params["amount"] = $this->getAmount();
         $params["invoice"] = $this->getInvoice();
         $params["invoiceDate"] = $this->getInvoiceDate();
-        $params["productCode"] = 95;
 
-
+        $params["productCode"] = self::$productCodes[$type];
         $params["serviceCode"] = self::$serviceCodes[$type];
         $params["serviceType"] = $type;
 
@@ -220,7 +228,6 @@ class BosIPG extends AbstractBosIPG
         $params["amount"] = $this->getAmount();
         $params["invoice"] = $this->getInvoice();
         $params["invoiceDate"] = $this->getInvoiceDate();
-        $params["productCode"] = $this->getProductCode();
         $params["billId"] = $this->getBillId();
         $params["paymentId"] = $this->getPaymentId();
 
