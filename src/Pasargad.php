@@ -45,12 +45,13 @@ class Pasargad extends AbstractPayment
      * @var string $certificateFile
      * @var string $action
      */
-    public function __construct($merchantCode, $terminalCode, $redirectAddress, $certificateFile, $action = "1003")
+    public function __construct($merchantCode, $terminalCode, $redirectAddress, $certificateFile, $merchantName = null, $action = "1003")
     {
         $this->merchantId = $merchantCode;
         $this->terminalId = $terminalCode;
         $this->redirectUrl = $redirectAddress;
         $this->certificate = $certificateFile;
+        $this->merchantName = $merchantName;
         $this->action = $action;
         $this->api = new RequestBuilder();
     }
@@ -84,8 +85,11 @@ class Pasargad extends AbstractPayment
         if ($this->getEmail()) {
             $params['email'] = $this->getEmail();
         }
+        
         if ($this->multiPaymentMode) { 
-            $params['MerchantName'] = $this->getMerchantName();
+            if ($this->getMerchantName() !== null) {
+                $params['MerchantName'] = $this->getMerchantName();
+            }
             $params['MultiPaymentData'] = base64_encode(json_encode($this->generatePayment()));
         }
 

@@ -21,7 +21,7 @@ abstract class AbstractPayment
     protected $certificate;
 
     /** @var string $merchantName */
-    protected $merchantName;
+    protected $merchantName = null;
 
     /** @var int $action */
     protected $action;

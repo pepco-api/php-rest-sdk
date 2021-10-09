@@ -41,6 +41,9 @@ class PaymentItem implements JsonSerializable
 
     public function setValue($value)
     {
+        if ($this->type == self::BY_PERCENTAGE &&  intval($value) > 100) {
+            throw new \Exception("For Percentage payment sharing type, you should set a value between 0 & 100");
+        }
         $this->value = $value;
     }
 
