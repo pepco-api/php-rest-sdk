@@ -1,5 +1,15 @@
 # Change Log
 All notable changes to this project is documented in this file.
+## [0.4.0] - 
+
+### Added
+ - BossIPG Implementation for Mobile credit charge
+ - MultiPayment Implementation added to package
+
+### Changes
+ - Add `Mobile` and `Email` fields to `getToken()` method  
+
+
 ## [0.3.1] - 2021 15 Sept (namespace conflicts)
 ### Changes
  - namespace typo fixed

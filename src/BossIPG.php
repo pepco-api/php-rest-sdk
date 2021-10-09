@@ -6,7 +6,7 @@ use Pasargad\Classes\AbstractBossIPG;
 
 class BossIPG extends AbstractBossIPG
 {
-    private const PLATFORM_WEB = "WEB";    
+    private const PLATFORM_WEB = "WEB";
     private const PURCHASE = "Purchase";
     private const BILL = "Bill";
 
@@ -223,7 +223,7 @@ class BossIPG extends AbstractBossIPG
         }
         return $response["data"];
     }
-    
+
     /**
      * Pay Bill
      * @deprecated
