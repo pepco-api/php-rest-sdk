@@ -3,11 +3,13 @@ All notable changes to this project is documented in this file.
 ## [0.4.0] - 
 
 ### Added
- - BossIPG Implementation for Mobile credit charge
- - MultiPayment Implementation added to package
+ - MultiPayment (Tas-him) Implementation
+ - BossIPG (Basket Of ServiceS) Implementation
 
 ### Changes
- - Add `Mobile` and `Email` fields to `getToken()` method  
+ - Add `Mobile` and `Email` fields to `getToken()` method
+ - Add SafeMode to check or not checking ssl certificate in curl
+ - debug refund method
 
 
 ## [0.3.1] - 2021 15 Sept (namespace conflicts)

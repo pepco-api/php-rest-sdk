@@ -16,6 +16,9 @@ class Pasargad extends AbstractPayment
     /** @var string $token */
     private $token = null;
 
+    /** @var boolean $safeMode */
+    private $safeMode = true;
+
     /** @var array $paymentItems */
     private $paymentItems = [];
 
@@ -45,7 +48,7 @@ class Pasargad extends AbstractPayment
      * @var string $certificateFile
      * @var string $action
      */
-    public function __construct($merchantCode, $terminalCode, $redirectAddress, $certificateFile, $merchantName = null, $action = "1003")
+    public function __construct($merchantCode, $terminalCode, $redirectAddress, $certificateFile, $merchantName = null, $action = "1003", $safeMode = true)
     {
         $this->merchantId = $merchantCode;
         $this->terminalId = $terminalCode;
@@ -53,6 +56,7 @@ class Pasargad extends AbstractPayment
         $this->certificate = $certificateFile;
         $this->merchantName = $merchantName;
         $this->action = $action;
+        $this->safeMode = $safeMode;
         $this->api = new RequestBuilder();
     }
 
@@ -94,7 +98,7 @@ class Pasargad extends AbstractPayment
         }
 
         $sign = $this->sign(json_encode($params));
-        $this->token = $this->api->send(static::URL_GET_TOKEN, RequestBuilder::POST, ["Sign" => $sign], $params, true);
+        $this->token = $this->api->send(static::URL_GET_TOKEN, RequestBuilder::POST, ["Sign" => $sign], $params, true, $this->safeMode);
         return $this->token;
     }
 
@@ -123,7 +127,7 @@ class Pasargad extends AbstractPayment
         $params['terminalCode'] = $this->getTerminalId();
         $params['timeStamp'] = date("Y/m/d H:i:s");
         $sign = $this->sign(json_encode($params));
-        $response = $this->api->send(static::URL_VERIFY_PAYMENT, RequestBuilder::POST, ["Sign" => $sign], $params, true);
+        $response = $this->api->send(static::URL_VERIFY_PAYMENT, RequestBuilder::POST, ["Sign" => $sign], $params, true, $this->safeMode);
         return $response;
     }
 
@@ -137,7 +141,7 @@ class Pasargad extends AbstractPayment
         $params['merchantCode'] = $this->getMerchantId();
         $params['terminalCode'] = $this->getTerminalId();
         $params['transactionReferenceID'] = $this->getTransactionReferenceId();
-        $response = $this->api->send(static::URL_CHECK_TRANSACTION, RequestBuilder::POST, [], $params, true);
+        $response = $this->api->send(static::URL_CHECK_TRANSACTION, RequestBuilder::POST, [], $params, true, $this->safeMode);
         return $response;
     }
 
@@ -152,7 +156,7 @@ class Pasargad extends AbstractPayment
         $params['terminalCode'] = $this->getTerminalId();
         $params['timeStamp'] = date("Y/m/d H:i:s");
         $sign = $this->sign(json_encode($params));
-        $response = $this->api->send(static::URL_VERIFY_PAYMENT, RequestBuilder::POST, ["Sign" => $sign], $params, true);
+        $response = $this->api->send(static::URL_REFUND, RequestBuilder::POST, ["Sign" => $sign], $params, true, $this->safeMode);
         return $response;
     }
 
@@ -164,7 +168,7 @@ class Pasargad extends AbstractPayment
 
 
     private function generatePayment()
-    {       
+    {
         $xw = xmlwriter_open_memory();
         xmlwriter_set_indent($xw, 1);
         $res = xmlwriter_set_indent_string($xw, ' ');
