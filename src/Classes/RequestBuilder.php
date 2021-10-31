@@ -52,7 +52,7 @@ class RequestBuilder
      * @throws Exception Throw on unsupported $method use.
      * @throws \Exception Throw on API return invalid response.
      */
-    public function send($url, $method = self::POST, array $headers = [], array $body = [], $encodeJson = false)
+    public function send($url, $method = self::POST, array $headers = [], array $body = [], $encodeJson = false, $safeMode = true)
     {
         $this->internalCurl->reset();
         foreach ($this->options as $option => $value) {
@@ -61,6 +61,12 @@ class RequestBuilder
 
         $this->internalCurl->setHeader('Content-Type', 'application/json');
         $this->internalCurl->setHeader('Accept', 'application/json');
+
+        // Disable Certificate checking in Curl
+        if (! $safeMode) {
+            $this->internalCurl->setOpt(CURLOPT_SSL_VERIFYPEER,false);
+        }
+
         foreach ($headers as $headerKey => $headerValue) {
             $this->internalCurl->setHeader($headerKey, $headerValue);
         }

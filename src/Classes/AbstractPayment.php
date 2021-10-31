@@ -20,6 +20,9 @@ abstract class AbstractPayment
     /** @var string $certificate */
     protected $certificate;
 
+    /** @var string $merchantName */
+    protected $merchantName = null;
+
     /** @var int $action */
     protected $action;
 
@@ -40,6 +43,8 @@ abstract class AbstractPayment
 
     /** @var string $transactionReferenceId */
     private $transactionReferenceId;
+
+
 
 
     public function getMobile()
@@ -155,5 +160,15 @@ abstract class AbstractPayment
     public function getTransactionReferenceId()
     {
         return $this->transactionReferenceId;
+    } 
+
+    public function setMerchantName($merchantName)
+    {
+        $this->merchantName = $merchantName;
+    }
+
+    public function getMerchantName()
+    {
+        return $this->merchantName;
     }
 }

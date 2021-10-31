@@ -14,35 +14,66 @@ $ composer require pepco-api/php-rest-sdk
 
 ## Redirect User to Payment Gateway
 ```php
-// Tip! Initialize this property in your payment service __constructor() method!
-$pasargad = new Pasargad(
-    "YOUR_MERCHANT_CODE",
-    "YOUR_TERMINAL_ID",
-    "http://yoursite.com/redirect-url-here/",
-    "certificate_file_location");
-    //e.q: 
-    // $pasargad = new Pasargad(123456,555555,"http://pep.co.ir/ipgtest","../cert/cert.xml");
+// Use pasargad package 
+use Pasargad\Pasargad;
 
-// Set Amount
-$pasargad->setAmount(15000); 
+// Always use try catch for handling errors
+try {
+    // Tip! Initialize this property in your payment service __constructor() method!
+    $pasargad = new Pasargad(
+      "YOUR_MERCHANT_CODE",
+      "YOUR_TERMINAL_ID",
+      "http://yoursite.com/redirect-url-here/",
+      "certificate_file_location");
+      //e.q: 
+      // $pasargad = new Pasargad(123456,555555,"http://pep.co.ir/ipgtest","../cert/cert.xml");
 
-// Set Invoice Number (it MUST BE UNIQUE) 
-$pasargad->setInvoiceNumber(4029);
+    // Set Amount
+    $pasargad->setAmount(100000); 
 
-// set Invoice Date with below format (Y/m/d H:i:s)
-$pasargad->setInvoiceDate("2021/08/08 11:54:03");
+    // Set Invoice Number (it MUST BE UNIQUE) 
+    $pasargad->setInvoiceNumber(4029);
 
-// get the Generated RedirectUrl from Pasargad API:
-$redirectUrl = $pasargad->redirect();
-var_dump($redirectUrl);
-// output example: https://pep.shaparak.ir/payment.aspx?n=bPo+Z8GLB4oh5W0KVNohihxCu1qBB3kziabGvO1xqg8Y=  
+    // set Invoice Date with below format (Y/m/d H:i:s)
+    $pasargad->setInvoiceDate("2021/08/08 11:54:03");
+
+    // Optional Parameters
+    // ----------------------
+    // User's Mobile and Email:
+    $this->pasargad->setMobile("09121001234");
+    $this->pasargad->setEmail("user@email.com");
 
 
-// and redirect user to payment gateway:
-return header("Location: $redirectUrl");
+    // IF YOU HAVE ACTIVATED "TAS-HIM" (تسهیم پرداخت), ADD SHABA AND PAYMENT SHARING PERCENTAGE/VALUE LIKE THIS:
+    // شروع تسهیم ---------------------------------------------
+    // فقط در صورتیکه قابلیت تسهیم شاپرکی را روی درگاه خود
+    // فعال کرده‌اید از متد addPaymentType استفاده کنید.
 
-// ...or in Laravel/Symfony Controller (Controller extends Symfony\Component\HttpFoundation\Response):
-return  $this->redirect($redirectUrl);
+    // تسهیم درصدی ۲۰ به ۸۰:
+    $this->pasargad->addPaymentType("IR300570023980000000000000",PaymentItem::BY_PERCENTAGE, 20);
+    $this->pasargad->addPaymentType("IR070570022080000000000001",PaymentItem::BY_PERCENTAGE, 80);
+
+    // تسهیم مبلغی:
+    $this->pasargad->addPaymentType("IR300570023980000000000000",PaymentItem::BY_VALUE, 20000);
+    $this->pasargad->addPaymentType("IR070570022080000000000001",PaymentItem::BY_VALUE, 80000);
+    // پایان تسهیم --------------------------------------------
+
+
+
+    // get the Generated RedirectUrl from Pasargad API:
+    $redirectUrl = $pasargad->redirect();
+    var_dump($redirectUrl);
+    // output example: https://pep.shaparak.ir/payment.aspx?n=bPo+Z8GLB4oh5W0KVNohihxCu1qBB3kziabGvO1xqg8Y=  
+
+    // and redirect user to payment gateway:
+    return header("Location: $redirectUrl");
+
+    // ...or in Laravel/Symfony Controller (Controller extends Symfony\Component\HttpFoundation\Response):
+    return  $this->redirect($redirectUrl);
+} catch (\Exception $ex) {
+      var_dump($ex->getMessage());
+      die();
+}
 ```
 
 ## Checking and Verifying Transaction
@@ -88,7 +119,7 @@ $result = [
   "Message" => "عمليات به اتمام رسيد"
 ]
 ```
-If you got `IsSuccess` with `true` value, so everything is O.K!
+If you got `IsSuccess` with `true` value, so everything is O.K! otherwise, you will get an Exception.
 
 Now, for your successful transaction, you should call `verifyPayment()` method to keep the money and Bank makes sure the checking process was done properly:
 
@@ -137,4 +168,4 @@ return $pasargad->refundPayment();
 # Support
 Please use your credentials to login into [Support Panel](https://my.pep.co.ir)
 
-Contact Author/Maintainer: [Reza Seyf](https://twitter.com/seyfcode) 
+Contact Author/Maintainer: [Reza Seyf](https://twitter.com/seyfcode)
