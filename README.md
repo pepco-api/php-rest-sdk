@@ -14,7 +14,7 @@ $ composer require pepco-api/php-rest-sdk
 
 ## Redirect User to Payment Gateway
 ```php
-// Use pasargad package
+// Use pasargad package 
 use Pasargad\Pasargad;
 
 // Always use try catch for handling errors
@@ -29,13 +29,36 @@ try {
       // $pasargad = new Pasargad(123456,555555,"http://pep.co.ir/ipgtest","../cert/cert.xml");
 
     // Set Amount
-    $pasargad->setAmount(15000); 
+    $pasargad->setAmount(100000); 
 
     // Set Invoice Number (it MUST BE UNIQUE) 
     $pasargad->setInvoiceNumber(4029);
 
     // set Invoice Date with below format (Y/m/d H:i:s)
     $pasargad->setInvoiceDate("2021/08/08 11:54:03");
+
+    // Optional Parameters
+    // ----------------------
+    // User's Mobile and Email:
+    $this->pasargad->setMobile("09121001234");
+    $this->pasargad->setEmail("user@email.com");
+
+
+    // IF YOU HAVE ACTIVATED "TAS-HIM" (تسهیم پرداخت), ADD SHABA AND PAYMENT SHARING PERCENTAGE/VALUE LIKE THIS:
+    // شروع تسهیم ---------------------------------------------
+    // فقط در صورتیکه قابلیت تسهیم شاپرکی را روی درگاه خود
+    // فعال کرده‌اید از متد addPaymentType استفاده کنید.
+
+    // تسهیم درصدی ۲۰ به ۸۰:
+    $this->pasargad->addPaymentType("IR300570023980000000000000",PaymentItem::BY_PERCENTAGE, 20);
+    $this->pasargad->addPaymentType("IR070570022080000000000001",PaymentItem::BY_PERCENTAGE, 80);
+
+    // تسهیم مبلغی:
+    $this->pasargad->addPaymentType("IR300570023980000000000000",PaymentItem::BY_VALUE, 20000);
+    $this->pasargad->addPaymentType("IR070570022080000000000001",PaymentItem::BY_VALUE, 80000);
+    // پایان تسهیم --------------------------------------------
+
+
 
     // get the Generated RedirectUrl from Pasargad API:
     $redirectUrl = $pasargad->redirect();
