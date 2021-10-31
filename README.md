@@ -16,6 +16,7 @@ $ composer require pepco-api/php-rest-sdk
 ```php
 // Use pasargad package 
 use Pasargad\Pasargad;
+use Pasargad\Classes\PaymentItem;
 
 // Always use try catch for handling errors
 try {
