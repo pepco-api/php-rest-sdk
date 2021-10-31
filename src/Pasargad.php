@@ -94,7 +94,7 @@ class Pasargad extends AbstractPayment
             if ($this->getMerchantName() !== null) {
                 $params['MerchantName'] = $this->getMerchantName();
             }
-            $params['MultiPaymentData'] = base64_encode(json_encode($this->generatePayment()));
+            $params['MultiPaymentData'] = base64_encode($this->generatePayment());
         }
 
         $sign = $this->sign(json_encode($params));
